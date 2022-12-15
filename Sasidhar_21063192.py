@@ -1,62 +1,62 @@
+# Import the packages Required for Visualisation
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-#handling dataset
-def manipulate_data(path):
-    ''' the Function is used for generating two dataset with country and year as columns
-    parameters: Path- path of the dataset.
-    returns: two dataframes.
+#data handling
+def format_data(path):
+    ''' 
+    the Function is used to create two datasets using the parameters for the columns "country" and "year."
     '''
-    temp_df = pd.read_excel(path)
-    temp_df=temp_df.drop(columns=['Indicator Code','Country Code'])
-  #  temp_df = temp_df.dropna(axis=0,how='any',thresh=5)
-    temp2_df = temp_df.transpose()
-    temp2_df.columns = temp2_df.iloc[0].values.tolist()
+    a_df = pd.read_excel(path)
+    a_df=a_df.drop(columns=['Indicator Code','Country Code'])
+    #creating second dataframe using transpose 
+    a2_df = a_df.transpose()
+    a2_df.columns = a2_df.iloc[0].values.tolist()
     
-    temp2_df=temp2_df.iloc[1:]
+    a2_df=a2_df.iloc[1:]
  
-    return temp_df,temp2_df
+    return a_df,a2_df
 
-country_data,year_data=manipulate_data('climate_data.xlsx')
+data_country,data_year=format_data('World Bank climate_data.xlsx')
 
-columns=year_data.iloc[0].unique()
+colmns=data_year.iloc[0].unique()
 
+# taking fie countries for the data analysis of the world bank parameters
 
+countries=['Brazil','India','United Kingdom','Germany','Belgium']
 
-asian_countries=['Brazil','India','United Kingdom','Germany','Belgium']
-
-country_select=year_data[asian_countries]
+countries_select=data_year[countries]
 
 #plotting bar graphs
-def bars_plot(data_input,indicator):
+def plot_bar(data_input,indicator):
     '''
     The function is used to plot the bar graphs for the given data and its indicators
     parameters: data_input- dataset, indicator- indicators to plot
     '''
-    temp=[]
+    t=[]
     c= indicator
     for i in range(5):
-        temp.append(data_input.iloc[:,c])
+        t.append(data_input.iloc[:,c])
         i=i+1
         c=c+76
-    d= pd.DataFrame(temp)
+    d= pd.DataFrame(t)
     d=d.iloc[:,1:]
     d=d.transpose()
-    d.iloc[[30,36,42,48,54]].plot(kind='bar',figsize=(15,8), xlabel ='Years',ylabel=columns[indicator],title=columns[indicator]+' from 1990 to 2019')
+    d.iloc[[30,36,42,48,54]].plot(kind='bar',figsize=(15,8),title=colmns[indicator]+' from 1990 to 2019')
     plt.show()
     
-bars_plot(country_select,4)
-bars_plot(country_select,52)
+plot_bar(countries_select,4)
+plot_bar(countries_select,52)
 
 #plotting correlation
-country=year_data[['Germany']]
-temp=[]
-indicators_index=[4,52,55,43,58,63]
-for i in indicators_index:
-    temp.append(country.iloc[:,i])
-d= pd.DataFrame(temp)
+country=data_year[['Germany']]
+t=[]
+indi_index=[4,52,55,43,58,63]
+for i in indi_index:
+    t.append(country.iloc[:,i])
+d= pd.DataFrame(t)
 d=d.transpose()
 d.columns=d.iloc[0]
 d=d[31:60]
@@ -70,12 +70,12 @@ plt.title(" Germany indicators correlation")
 plt.show()
 
 #plotting correlation
-country=year_data[['India']]
-temp=[]
-indicators_index=[4,52,55,43,58,63]
-for i in indicators_index:
-    temp.append(country.iloc[:,i])
-d= pd.DataFrame(temp)
+country=data_year[['India']]
+t=[]
+indi_index=[4,52,55,43,58,63]
+for i in indi_index:
+    t.append(country.iloc[:,i])
+d= pd.DataFrame(t)
 d=d.transpose()
 d.columns=d.iloc[0]
 d=d[31:60]
@@ -91,22 +91,22 @@ plt.show()
 
 
 #plotting line graph
-def line_plot(data_input,indicator):
+def plot_line(data_input,indicator):
   
-    temp=[]
+    t=[]
     c= indicator
     for i in range(5):
-        temp.append(data_input.iloc[:,c])
+        t.append(data_input.iloc[:,c])
         i=i+1
         c=c+76
-    d= pd.DataFrame(temp)
+    d= pd.DataFrame(t)
     d=d.iloc[:,1:]
     d=d.transpose()
-    d.iloc[30:58].plot(kind='line',figsize=(15,8),xlabel ='Years',ylabel=columns[indicator],title=columns[indicator]+' from 1990 to 2015')
+    d.iloc[30:58].plot(kind='line',figsize=(15,8),title=colmns[indicator]+' from 1990 to 2015')
     plt.show()
 
-line_plot(country_select,60)
-line_plot(country_select,37)
+plot_line(countries_select,60)
+plot_line(countries_select,37)
 
 
 
